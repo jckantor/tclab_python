@@ -13,12 +13,14 @@ class TCLab(object):
         else:
             port = self.findPort()
         self._T1 = self._T2 = 0
-        print('Opening connection')
+        print('Opening connection...')
         self.sp = serial.Serial(port=port, baudrate=baud, timeout=2)
         self.sp.flushInput()
         self.sp.flushOutput()
         time.sleep(3)
-        print('TCLab connected via Arduino on port ' + port)
+        self.version = self.read('VER')
+        print('TCLab connected via Arduino on port', port)
+        print('Version:', self.version)
 
     def findPort(self):
         found = False
@@ -59,9 +61,6 @@ class TCLab(object):
 
     def stop(self):
         return self.read('X')
-
-    def version(self):
-        return self.read('VER')
 
     @property
     def T1(self):
